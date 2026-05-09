@@ -332,7 +332,7 @@ const loveText = document.querySelector(".love-message h4");
 
 // Fade-in effect for showing messages
 function showMessage(message) {
-  loveText.textContent = message;
+  loveText.innerHTML = message;
   loveText.classList.add("fade-in");
 }
 
@@ -356,7 +356,7 @@ document.body.addEventListener("click", () => {
     index = (index + 1) % messages.length;
 
     // Update text BEFORE fading in
-    loveText.textContent = messages[index];
+    loveText.innerHTML = messages[index];
 
     // Fade in new message
     loveText.classList.remove("hidden-message");
