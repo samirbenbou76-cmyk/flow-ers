@@ -10,6 +10,7 @@
 
     
 <body class="not-loaded">
+    <div class="snowfall" aria-hidden="true"></div>
     <div class="night"><div class="love-message">
   <h4></h4>
 </div>
@@ -329,6 +330,28 @@ const messages = [
 
 let index = 0;
 const loveText = document.querySelector(".love-message h4");
+const snowfall = document.querySelector(".snowfall");
+let snowing = false;
+let pressTimer;
+let longPressTriggered = false;
+
+function toggleSnowfall() {
+  snowing = !snowing;
+  snowfall.classList.toggle("snowfall--active", snowing);
+
+  if (snowing && snowfall.childElementCount === 0) {
+    for (let i = 0; i < 90; i += 1) {
+      const flake = document.createElement("span");
+      flake.className = "snowflake";
+      flake.style.setProperty("--snow-left", `${Math.random() * 100}%`);
+      flake.style.setProperty("--snow-size", `${0.35 + Math.random() * 0.8}vmin`);
+      flake.style.setProperty("--snow-duration", `${7 + Math.random() * 9}s`);
+      flake.style.setProperty("--snow-delay", `${Math.random() * -15}s`);
+      flake.style.setProperty("--snow-drift", `${-10 + Math.random() * 20}vmin`);
+      snowfall.appendChild(flake);
+    }
+  }
+}
 
 // Fade-in effect for showing messages
 function showMessage(message) {
@@ -344,8 +367,24 @@ window.addEventListener("DOMContentLoaded", () => {
   }, 6000); // delay before first message appears
 });
 
-// On tap: fade out old → switch text → fade in new
+// A long press toggles snowfall and never changes the message.
+document.body.addEventListener("pointerdown", () => {
+  longPressTriggered = false;
+  pressTimer = setTimeout(() => {
+    longPressTriggered = true;
+    toggleSnowfall();
+  }, 2000);
+});
+
+document.body.addEventListener("pointerup", () => clearTimeout(pressTimer));
+document.body.addEventListener("pointercancel", () => clearTimeout(pressTimer));
+
+// A normal tap changes the message; a long press is ignored here.
 document.body.addEventListener("click", () => {
+  if (longPressTriggered) {
+    longPressTriggered = false;
+    return;
+  }
 
   // Fade out old message
   loveText.classList.remove("fade-in");
