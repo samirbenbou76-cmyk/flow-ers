@@ -11,6 +11,7 @@
     
 <body class="not-loaded">
     <div class="snowfall" aria-hidden="true"></div>
+    <div class="fireflies" aria-hidden="true"></div>
     <div class="night"><div class="love-message">
   <h4></h4>
 </div>
@@ -331,9 +332,32 @@ const messages = [
 let index = 0;
 const loveText = document.querySelector(".love-message h4");
 const snowfall = document.querySelector(".snowfall");
+const fireflies = document.querySelector(".fireflies");
 let snowing = false;
+let firefliesActive = false;
 let pressTimer;
 let longPressTriggered = false;
+let pendingTapTimer;
+
+function toggleFireflies() {
+  firefliesActive = !firefliesActive;
+  fireflies.classList.toggle("fireflies--active", firefliesActive);
+
+  if (fireflies.childElementCount === 0) {
+    for (let i = 0; i < 24; i += 1) {
+      const firefly = document.createElement("span");
+      firefly.className = "firefly";
+      firefly.style.setProperty("--fly-left", `${8 + Math.random() * 84}%`);
+      firefly.style.setProperty("--fly-top", `${25 + Math.random() * 58}%`);
+      firefly.style.setProperty("--fly-size", `${0.45 + Math.random() * 0.45}vmin`);
+      firefly.style.setProperty("--fly-duration", `${4 + Math.random() * 5}s`);
+      firefly.style.setProperty("--fly-delay", `${Math.random() * -8}s`);
+      firefly.style.setProperty("--fly-drift-x", `${-12 + Math.random() * 24}vmin`);
+      firefly.style.setProperty("--fly-drift-y", `${-10 + Math.random() * 20}vmin`);
+      fireflies.appendChild(firefly);
+    }
+  }
+}
 
 function toggleSnowfall() {
   snowing = !snowing;
@@ -372,6 +396,8 @@ document.body.addEventListener("pointerdown", () => {
   longPressTriggered = false;
   pressTimer = setTimeout(() => {
     longPressTriggered = true;
+    clearTimeout(pendingTapTimer);
+    pendingTapTimer = undefined;
     toggleSnowfall();
   }, 2000);
 });
@@ -379,29 +405,40 @@ document.body.addEventListener("pointerdown", () => {
 document.body.addEventListener("pointerup", () => clearTimeout(pressTimer));
 document.body.addEventListener("pointercancel", () => clearTimeout(pressTimer));
 
-// A normal tap changes the message; a long press is ignored here.
+// A normal tap changes the message. A double tap triggers fireflies instead.
 document.body.addEventListener("click", () => {
   if (longPressTriggered) {
     longPressTriggered = false;
     return;
   }
 
-  // Fade out old message
-  loveText.classList.remove("fade-in");
-  loveText.classList.add("hidden-message");
+  if (pendingTapTimer) {
+    clearTimeout(pendingTapTimer);
+    pendingTapTimer = undefined;
+    toggleFireflies();
+    return;
+  }
 
-  // After fade-out animation finishes
-  setTimeout(() => {
-    index = (index + 1) % messages.length;
+  pendingTapTimer = setTimeout(() => {
+    pendingTapTimer = undefined;
 
-    // Update text BEFORE fading in
-    loveText.innerHTML = messages[index];
+    // Fade out old → switch text → fade in new
+    loveText.classList.remove("fade-in");
+    loveText.classList.add("hidden-message");
 
-    // Fade in new message
-    loveText.classList.remove("hidden-message");
-    loveText.classList.add("fade-in");
+    // After fade-out animation finishes
+    setTimeout(() => {
+      index = (index + 1) % messages.length;
 
-  }, 600); // match CSS fade-out duration
+      // Update text BEFORE fading in
+      loveText.innerHTML = messages[index];
+
+      // Fade in new message
+      loveText.classList.remove("hidden-message");
+      loveText.classList.add("fade-in");
+
+    }, 600); // match CSS fade-out duration
+  }, 280);
 });
 
 </script>
