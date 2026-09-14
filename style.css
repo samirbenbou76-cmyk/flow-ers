@@ -19,6 +19,9 @@ body {
   overflow: hidden;
   perspective: 1000px;
   padding: 50px 0px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .snowfall {
