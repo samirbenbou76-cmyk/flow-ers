@@ -12,7 +12,23 @@
 <body class="not-loaded">
     <div class="snowfall" aria-hidden="true"></div>
     <div class="night-sky" aria-hidden="true">
-      <div class="moon"></div>
+      <svg class="moon" viewBox="0 0 100 100" role="presentation">
+        <defs>
+          <radialGradient id="moon-gradient" cx="34%" cy="28%" r="78%">
+            <stop offset="0%" stop-color="#fffde4" />
+            <stop offset="48%" stop-color="#f6edb4" />
+            <stop offset="100%" stop-color="#c8bd7d" />
+          </radialGradient>
+          <filter id="moon-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path class="moon-crescent" d="M 72 7 A 43 43 0 1 0 72 93 A 31 43 0 1 1 72 7 Z" fill="url(#moon-gradient)" filter="url(#moon-glow)" />
+      </svg>
     </div>
     <div class="night"><div class="love-message">
   <h4></h4>
