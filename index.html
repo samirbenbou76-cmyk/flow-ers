@@ -11,7 +11,9 @@
     
 <body class="not-loaded">
     <div class="snowfall" aria-hidden="true"></div>
-    <div class="fireflies" aria-hidden="true"></div>
+    <div class="night-sky" aria-hidden="true">
+      <div class="moon"></div>
+    </div>
     <div class="night"><div class="love-message">
   <h4></h4>
 </div>
@@ -332,29 +334,27 @@ const messages = [
 let index = 0;
 const loveText = document.querySelector(".love-message h4");
 const snowfall = document.querySelector(".snowfall");
-const fireflies = document.querySelector(".fireflies");
+const nightSky = document.querySelector(".night-sky");
 let snowing = false;
-let firefliesActive = false;
+let nightSkyActive = false;
 let pressTimer;
 let longPressTriggered = false;
 let pendingTapTimer;
 
-function toggleFireflies() {
-  firefliesActive = !firefliesActive;
-  fireflies.classList.toggle("fireflies--active", firefliesActive);
+function toggleNightSky() {
+  nightSkyActive = !nightSkyActive;
+  nightSky.classList.toggle("night-sky--active", nightSkyActive);
 
-  if (fireflies.childElementCount === 0) {
-    for (let i = 0; i < 24; i += 1) {
-      const firefly = document.createElement("span");
-      firefly.className = "firefly";
-      firefly.style.setProperty("--fly-left", `${8 + Math.random() * 84}%`);
-      firefly.style.setProperty("--fly-top", `${25 + Math.random() * 58}%`);
-      firefly.style.setProperty("--fly-size", `${0.45 + Math.random() * 0.45}vmin`);
-      firefly.style.setProperty("--fly-duration", `${4 + Math.random() * 5}s`);
-      firefly.style.setProperty("--fly-delay", `${Math.random() * -8}s`);
-      firefly.style.setProperty("--fly-drift-x", `${-12 + Math.random() * 24}vmin`);
-      firefly.style.setProperty("--fly-drift-y", `${-10 + Math.random() * 20}vmin`);
-      fireflies.appendChild(firefly);
+  if (nightSky.childElementCount === 1) {
+    for (let i = 0; i < 75; i += 1) {
+      const star = document.createElement("span");
+      star.className = "star";
+      star.style.setProperty("--star-left", `${4 + Math.random() * 92}%`);
+      star.style.setProperty("--star-top", `${5 + Math.random() * 68}%`);
+      star.style.setProperty("--star-size", `${0.18 + Math.random() * 0.45}vmin`);
+      star.style.setProperty("--star-duration", `${2 + Math.random() * 4}s`);
+      star.style.setProperty("--star-delay", `${Math.random() * -6}s`);
+      nightSky.appendChild(star);
     }
   }
 }
@@ -405,7 +405,7 @@ document.body.addEventListener("pointerdown", () => {
 document.body.addEventListener("pointerup", () => clearTimeout(pressTimer));
 document.body.addEventListener("pointercancel", () => clearTimeout(pressTimer));
 
-// A normal tap changes the message. A double tap triggers fireflies instead.
+// A normal tap changes the message. A double tap reveals the night sky instead.
 document.body.addEventListener("click", () => {
   if (longPressTriggered) {
     longPressTriggered = false;
@@ -415,7 +415,7 @@ document.body.addEventListener("click", () => {
   if (pendingTapTimer) {
     clearTimeout(pendingTapTimer);
     pendingTapTimer = undefined;
-    toggleFireflies();
+    toggleNightSky();
     return;
   }
 
