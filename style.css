@@ -81,18 +81,8 @@ body {
   background: radial-gradient(circle at 34% 30%, #fffde4 0 8%, #f6edb4 40%, #c8bd7d 100%);
   box-shadow: 0 0 2vmin rgba(255, 247, 187, 0.65), 0 0 7vmin rgba(183, 194, 255, 0.28);
   transform: rotate(-18deg);
-}
-
-.moon::after {
-  content: "";
-  position: absolute;
-  top: -1.2vmin;
-  left: 4.8vmin;
-  width: 14vmin;
-  height: 14vmin;
-  border-radius: 50%;
-  background: #050b22;
-  box-shadow: inset 1vmin -0.5vmin 1.5vmin rgba(29, 43, 86, 0.5);
+  -webkit-mask-image: radial-gradient(circle at 30% 50%, #000 0 63%, transparent 64%);
+  mask-image: radial-gradient(circle at 30% 50%, #000 0 63%, transparent 64%);
 }
 
 .star {
@@ -235,6 +225,7 @@ body {
   top: 135px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 30;
   width: 90%;
   text-align: center;
   color: #ff99cc;
