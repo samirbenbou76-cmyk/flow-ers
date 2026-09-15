@@ -104,9 +104,9 @@ body {
 
 .lily-reveal {
   position: fixed;
-  top: 31vmin;
+  top: clamp(260px, 42vmin, 520px);
   left: 50%;
-  width: min(25vmin, 185px);
+  width: min(20vmin, 150px);
   transform: translateX(-50%) translateY(1.5vmin) scale(0.86);
   pointer-events: none;
   z-index: 20;
