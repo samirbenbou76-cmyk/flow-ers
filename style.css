@@ -133,7 +133,11 @@ body {
 }
 
 .lily-reveal p {
+  position: relative;
+  left: 50%;
+  width: 90vw;
   margin-top: -0.5vmin;
+  margin-left: 0;
   color: #ff99cc;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 6vw;
@@ -149,9 +153,9 @@ body {
 }
 
 @keyframes lily-message-float {
-  0% { transform: translateY(0vmin); opacity: 0.8; }
-  50% { transform: translateY(2vmin); opacity: 1; }
-  100% { transform: translateY(0vmin); opacity: 0.8; }
+  0% { transform: translateX(-50%) translateY(0vmin); opacity: 0.8; }
+  50% { transform: translateX(-50%) translateY(2vmin); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0vmin); opacity: 0.8; }
 }
 
 .night {
