@@ -30,6 +30,35 @@
         <path class="moon-crescent" d="M 72 7 A 43 43 0 1 0 72 93 A 31 43 0 1 1 72 7 Z" fill="url(#moon-gradient)" filter="url(#moon-glow)" />
       </svg>
     </div>
+    <div class="lily-reveal" aria-hidden="true">
+      <svg class="lily-mark" viewBox="0 0 240 220" role="presentation">
+        <defs>
+          <radialGradient id="lily-petal" cx="50%" cy="35%" r="75%">
+            <stop offset="0%" stop-color="#fffaff" />
+            <stop offset="58%" stop-color="#ffd5ed" />
+            <stop offset="100%" stop-color="#dc78b0" />
+          </radialGradient>
+          <filter id="lily-glow" x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="3" result="soft" />
+            <feMerge><feMergeNode in="soft" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+        <g class="lily-flower" filter="url(#lily-glow)">
+          <path d="M120 113 C85 91 69 55 83 19 C116 28 127 62 120 113Z" fill="url(#lily-petal)" />
+          <path d="M120 113 C155 91 171 55 157 19 C124 28 113 62 120 113Z" fill="url(#lily-petal)" />
+          <path d="M120 112 C102 75 105 31 120 7 C135 31 138 75 120 112Z" fill="url(#lily-petal)" />
+          <path d="M120 113 C80 119 43 103 25 72 C58 58 95 72 120 113Z" fill="url(#lily-petal)" />
+          <path d="M120 113 C160 119 197 103 215 72 C182 58 145 72 120 113Z" fill="url(#lily-petal)" />
+          <path d="M120 111 C98 137 66 151 34 139 C45 108 78 95 120 111Z" fill="url(#lily-petal)" />
+          <path d="M120 111 C142 137 174 151 206 139 C195 108 162 95 120 111Z" fill="url(#lily-petal)" />
+          <circle cx="120" cy="110" r="13" fill="#f7b84b" />
+          <path d="M118 108 L83 67 M122 108 L157 67 M116 108 L105 45 M124 108 L135 45" stroke="#f6c96c" stroke-width="3" stroke-linecap="round" />
+          <circle cx="83" cy="67" r="3.5" fill="#fff0a8" /><circle cx="157" cy="67" r="3.5" fill="#fff0a8" />
+          <circle cx="105" cy="45" r="3.5" fill="#fff0a8" /><circle cx="135" cy="45" r="3.5" fill="#fff0a8" />
+        </g>
+      </svg>
+      <p>For the girl who loves lilies...</p>
+    </div>
     <div class="night"><div class="love-message">
   <h4></h4>
 </div>
@@ -351,11 +380,14 @@ let index = 0;
 const loveText = document.querySelector(".love-message h4");
 const snowfall = document.querySelector(".snowfall");
 const nightSky = document.querySelector(".night-sky");
+const lilyReveal = document.querySelector(".lily-reveal");
 let snowing = false;
 let nightSkyActive = false;
+let lilyActive = false;
 let pressTimer;
 let longPressTriggered = false;
 let pendingTapTimer;
+let tapCount = 0;
 
 function toggleNightSky() {
   nightSkyActive = !nightSkyActive;
@@ -393,6 +425,11 @@ function toggleSnowfall() {
   }
 }
 
+function toggleLily() {
+  lilyActive = !lilyActive;
+  lilyReveal.classList.toggle("lily-reveal--active", lilyActive);
+}
+
 // Fade-in effect for showing messages
 function showMessage(message) {
   loveText.innerHTML = message;
@@ -414,6 +451,7 @@ document.body.addEventListener("pointerdown", () => {
     longPressTriggered = true;
     clearTimeout(pendingTapTimer);
     pendingTapTimer = undefined;
+    tapCount = 0;
     toggleSnowfall();
   }, 2000);
 });
@@ -421,22 +459,29 @@ document.body.addEventListener("pointerdown", () => {
 document.body.addEventListener("pointerup", () => clearTimeout(pressTimer));
 document.body.addEventListener("pointercancel", () => clearTimeout(pressTimer));
 
-// A normal tap changes the message. A double tap reveals the night sky instead.
+// Single tap changes the message, double tap reveals the sky, triple tap reveals the lily.
 document.body.addEventListener("click", () => {
   if (longPressTriggered) {
     longPressTriggered = false;
     return;
   }
 
-  if (pendingTapTimer) {
-    clearTimeout(pendingTapTimer);
-    pendingTapTimer = undefined;
-    toggleNightSky();
-    return;
-  }
+  tapCount += 1;
+  clearTimeout(pendingTapTimer);
 
   pendingTapTimer = setTimeout(() => {
+    const gesture = tapCount;
+    tapCount = 0;
     pendingTapTimer = undefined;
+
+    if (gesture === 2) {
+      toggleNightSky();
+      return;
+    }
+    if (gesture >= 3) {
+      toggleLily();
+      return;
+    }
 
     // Fade out old → switch text → fade in new
     loveText.classList.remove("fade-in");
@@ -454,7 +499,7 @@ document.body.addEventListener("click", () => {
       loveText.classList.add("fade-in");
 
     }, 600); // match CSS fade-out duration
-  }, 280);
+  }, 320);
 });
 
 </script>
