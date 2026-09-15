@@ -136,7 +136,7 @@ body {
   margin-top: -0.5vmin;
   color: #ff99cc;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: clamp(12px, 3.5vw, 20px);
+  font-size: 6vw;
   font-weight: bold;
   text-shadow: 0 0 1vmin #ff69b4, 0 0 2vmin #ff99cc;
   white-space: nowrap;
@@ -149,8 +149,9 @@ body {
 }
 
 @keyframes lily-message-float {
-  from { transform: translateY(0); opacity: 0.8; }
-  to { transform: translateY(2vmin); opacity: 1; }
+  0% { transform: translateY(0vmin); opacity: 0.8; }
+  50% { transform: translateY(2vmin); opacity: 1; }
+  100% { transform: translateY(0vmin); opacity: 0.8; }
 }
 
 .night {
@@ -327,6 +328,10 @@ body {
 @media (max-width: 480px) {
   .love-message {
     top: 120px;
+    font-size: 7vw;
+  }
+
+  .lily-reveal p {
     font-size: 7vw;
   }
 }
